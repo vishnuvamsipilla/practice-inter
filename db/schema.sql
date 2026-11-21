@@ -13,5 +13,9 @@ CREATE TABLE IF NOT EXISTS templates (
   status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
   views BIGINT NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  -- Gallery, all categories: WHERE status = 'published' ORDER BY created_at DESC, id DESC
+  INDEX idx_status_created (status, created_at, id),
+  -- Gallery, one category: WHERE status = 'published' AND category_id = ? ORDER BY created_at DESC, id DESC
+  INDEX idx_status_cat_created (status, category_id, created_at, id)
 );
